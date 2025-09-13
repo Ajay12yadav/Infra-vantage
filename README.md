@@ -1,73 +1,51 @@
-# Welcome to your Lovable project
+# DevOps Dashboard - Monitor & Manage Infrastructure
 
-## Project info
+A professional DevOps monitoring dashboard built with **React**, **Vite**, **TailwindCSS**, and **Shadcn UI**, designed to help monitor CI/CD pipelines, container management, and system metrics. 
 
-**URL**: https://lovable.dev/projects/648864c9-b638-4026-b831-b8cee3254610
+---
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+- Real-time monitoring of infrastructure and CI/CD pipelines  
+- Interactive charts and metrics using **Recharts**  
+- User-friendly UI built with **Shadcn UI** and **Radix UI**  
+- Supports dark and light themes with **Next-themes**  
+- Form validation using **React Hook Form** and **Zod**  
+- Animations powered by **Framer Motion**  
+- Component-driven architecture for scalability  
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/648864c9-b638-4026-b831-b8cee3254610) and start prompting.
+## Tech Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Frontend:** React 18, Vite, TypeScript  
+- **UI & Styling:** TailwindCSS, Shadcn UI, Radix UI, Tailwind Merge, Tailwind Animations  
+- **State & Data Fetching:** TanStack React Query  
+- **Charts & UI Components:** Recharts, Embla Carousel, Sonner (toast notifications)  
+- **Form Handling:** React Hook Form, Zod  
+- **Utilities:** Date-fns, clsx, class-variance-authority  
+- **Version Control:** Git / GitHub  
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Project Structure
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+devops-journey-hub-07/
+│
+├─ public/ # Static assets (favicon, images, etc.)
+├─ src/
+│ ├─ components/ # Reusable UI components
+│ ├─ pages/ # Page components (Dashboard, Metrics, etc.)
+│ ├─ App.tsx # Main App component
+│ ├─ main.tsx # Entry point
+│ └─ index.css # TailwindCSS styles
+├─ package.json
+├─ vite.config.ts
+├─ tailwind.config.ts
+└─ README.md
 
-Follow these steps:
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+---
 
-# Step 3: Install the necessary dependencies.
-npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/648864c9-b638-4026-b831-b8cee3254610) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
