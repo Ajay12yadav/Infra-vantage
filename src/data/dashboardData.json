@@ -1,0 +1,143 @@
+{
+  "summary": {
+    "totalPipelines": 24,
+    "runningContainers": 18,
+    "systemHealth": "Good",
+    "activeDeploys": 3
+  },
+  "pipelines": [
+    {
+      "id": 1,
+      "name": "api-service-deploy",
+      "status": "Success",
+      "branch": "main",
+      "lastRun": "2024-01-15T10:30:00Z",
+      "duration": "3m 42s",
+      "author": "john.doe"
+    },
+    {
+      "id": 2,
+      "name": "frontend-build",
+      "status": "Running",
+      "branch": "feature/dashboard",
+      "lastRun": "2024-01-15T11:15:00Z",
+      "duration": "2m 18s",
+      "author": "jane.smith"
+    },
+    {
+      "id": 3,
+      "name": "database-migration",
+      "status": "Failed",
+      "branch": "hotfix/db-schema",
+      "lastRun": "2024-01-15T09:45:00Z",
+      "duration": "1m 05s",
+      "author": "mike.wilson"
+    },
+    {
+      "id": 4,
+      "name": "integration-tests",
+      "status": "Success",
+      "branch": "develop",
+      "lastRun": "2024-01-15T08:22:00Z",
+      "duration": "8m 33s",
+      "author": "sarah.connor"
+    },
+    {
+      "id": 5,
+      "name": "security-scan",
+      "status": "Warning",
+      "branch": "main",
+      "lastRun": "2024-01-15T07:10:00Z",
+      "duration": "4m 17s",
+      "author": "alex.morgan"
+    }
+  ],
+  "containers": [
+    {
+      "id": 1,
+      "name": "web-app-prod",
+      "status": "Running",
+      "uptime": "15d 6h 23m",
+      "cpu": "12%",
+      "memory": "342MB",
+      "image": "web-app:v2.1.0",
+      "ports": "80:3000"
+    },
+    {
+      "id": 2,
+      "name": "api-gateway",
+      "status": "Running",
+      "uptime": "8d 14h 12m",
+      "cpu": "8%",
+      "memory": "128MB",
+      "image": "nginx:1.21",
+      "ports": "443:443"
+    },
+    {
+      "id": 3,
+      "name": "database-primary",
+      "status": "Running",
+      "uptime": "23d 2h 45m",
+      "cpu": "25%",
+      "memory": "1.2GB",
+      "image": "postgres:14",
+      "ports": "5432:5432"
+    },
+    {
+      "id": 4,
+      "name": "redis-cache",
+      "status": "Running",
+      "uptime": "12d 18h 56m",
+      "cpu": "3%",
+      "memory": "64MB",
+      "image": "redis:7-alpine",
+      "ports": "6379:6379"
+    },
+    {
+      "id": 5,
+      "name": "worker-queue",
+      "status": "Stopped",
+      "uptime": "0m",
+      "cpu": "0%",
+      "memory": "0MB",
+      "image": "worker:latest",
+      "ports": "-"
+    },
+    {
+      "id": 6,
+      "name": "monitoring-agent",
+      "status": "Running",
+      "uptime": "6d 3h 21m",
+      "cpu": "2%",
+      "memory": "45MB",
+      "image": "prometheus/node-exporter",
+      "ports": "9100:9100"
+    }
+  ],
+  "monitoring": {
+    "cpu": [
+      { "time": "00:00", "usage": 45 },
+      { "time": "04:00", "usage": 32 },
+      { "time": "08:00", "usage": 68 },
+      { "time": "12:00", "usage": 78 },
+      { "time": "16:00", "usage": 85 },
+      { "time": "20:00", "usage": 72 },
+      { "time": "24:00", "usage": 56 }
+    ],
+    "memory": [
+      { "time": "00:00", "usage": 62 },
+      { "time": "04:00", "usage": 58 },
+      { "time": "08:00", "usage": 74 },
+      { "time": "12:00", "usage": 82 },
+      { "time": "16:00", "usage": 89 },
+      { "time": "20:00", "usage": 76 },
+      { "time": "24:00", "usage": 65 }
+    ],
+    "currentStats": {
+      "cpu": 67,
+      "memory": 72,
+      "disk": 45,
+      "network": "2.3 GB/s"
+    }
+  }
+}

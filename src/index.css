@@ -2,41 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* DevOps Dashboard Design System - All colors, gradients, fonts, etc defined here. 
+All colors MUST be HSL for consistency.
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Dark DevOps Theme */
+    --background: 224 27% 9%;
+    --foreground: 213 27% 84%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 224 27% 12%;
+    --card-foreground: 213 27% 84%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 224 27% 12%;
+    --popover-foreground: 213 27% 84%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary - DevOps Blue */
+    --primary: 214 84% 56%;
+    --primary-foreground: 214 20% 98%;
+    --primary-glow: 214 84% 66%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - Muted Gray */
+    --secondary: 215 25% 27%;
+    --secondary-foreground: 213 27% 84%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 215 25% 16%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 215 25% 27%;
+    --accent-foreground: 213 27% 84%;
 
-    --destructive: 0 84.2% 60.2%;
+    /* Status Colors */
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
+    
+    --success: 142 76% 36%;
+    --success-foreground: 142 20% 98%;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 38 20% 15%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 215 25% 20%;
+    --input: 215 25% 16%;
+    --ring: 214 84% 56%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* DevOps Specific Design Tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-success: linear-gradient(135deg, hsl(var(--success)), hsl(142 76% 46%));
+    --gradient-warning: linear-gradient(135deg, hsl(var(--warning)), hsl(38 92% 60%));
+    --gradient-danger: linear-gradient(135deg, hsl(var(--destructive)), hsl(0 84% 70%));
+    --gradient-card: linear-gradient(135deg, hsl(var(--card)), hsl(215 25% 14%));
+    
+    --shadow-card: 0 4px 6px -1px hsl(224 27% 5% / 0.4);
+    --shadow-glow: 0 0 20px hsl(var(--primary) / 0.3);
+    
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
 
@@ -101,5 +124,52 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* Status Badge Variants */
+  .status-success {
+    @apply bg-gradient-to-r from-success to-success/80 text-success-foreground;
+  }
+  
+  .status-warning {
+    @apply bg-gradient-to-r from-warning to-warning/80 text-warning-foreground;
+  }
+  
+  .status-danger {
+    @apply bg-gradient-to-r from-destructive to-destructive/80 text-destructive-foreground;
+  }
+  
+  .status-running {
+    @apply bg-gradient-to-r from-primary to-primary-glow text-primary-foreground;
+  }
+
+  /* Card Enhancements */
+  .card-devops {
+    background: var(--gradient-card);
+    box-shadow: var(--shadow-card);
+    transition: var(--transition-smooth);
+  }
+  
+  .card-devops:hover {
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-1px);
+  }
+
+  /* Metric Cards */
+  .metric-card-success {
+    background: var(--gradient-success);
+    @apply text-success-foreground;
+  }
+  
+  .metric-card-warning {
+    background: var(--gradient-warning);
+    @apply text-warning-foreground;
+  }
+  
+  .metric-card-primary {
+    background: var(--gradient-primary);
+    @apply text-primary-foreground;
   }
 }
