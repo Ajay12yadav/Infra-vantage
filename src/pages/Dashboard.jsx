@@ -1,12 +1,47 @@
+import { useEffect, useState } from 'react'; // ⬅️ Added
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import MetricCard from '@/components/MetricCard';
 import StatusBadge from '@/components/StatusBadge';
-import { BarChart3, Container, GitBranch, Activity, Clock, Users } from 'lucide-react';
-import dashboardData from '@/data/dashboardData.json';
+import { BarChart3, Container, GitBranch, Activity, Clock } from 'lucide-react';
+// import dashboardData from '@/data/dashboardData.json'; ⬅️ Removed
 
 const Dashboard = () => {
-  const { summary, pipelines, containers } = dashboardData;
-  
+  const [summary, setSummary] = useState({});
+  const [pipelines, setPipelines] = useState([]);
+  const [containers, setContainers] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        // fetch from backend APIs
+        const [pipelinesRes, containersRes, monitoringRes] = await Promise.all([
+          fetch("http://localhost:5000/api/pipelines"),
+          fetch("http://localhost:5000/api/containers"),
+          fetch("http://localhost:5000/api/monitoring"),
+        ]);
+
+        const pipelinesData = await pipelinesRes.json();
+        const containersData = await containersRes.json();
+        const monitoringData = await monitoringRes.json();
+
+        // build same structure as dashboardData.json
+        setSummary({
+          totalPipelines: pipelinesData.length,
+          runningContainers: containersData.filter(c => c.status === "Running").length,
+          systemHealth: monitoringData.health || "OK",
+          activeDeploys: pipelinesData.filter(p => p.status === "Running").length,
+        });
+
+        setPipelines(pipelinesData);
+        setContainers(containersData);
+      } catch (err) {
+        console.error("Error fetching dashboard data:", err);
+      }
+    }
+
+    fetchData();
+  }, []);
+
   // Get recent pipelines for quick overview
   const recentPipelines = pipelines.slice(0, 3);
   const runningContainers = containers.filter(c => c.status === 'Running');
@@ -71,7 +106,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <div className="text-sm text-muted-foreground">
-                    {new Date(pipeline.lastRun).toLocaleTimeString()}
+                    {pipeline.lastRun ? new Date(pipeline.lastRun).toLocaleTimeString() : "N/A"}
                   </div>
                 </div>
               ))}

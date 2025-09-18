@@ -1,15 +1,30 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import StatusBadge from '@/components/StatusBadge';
-import { Container, Play, Square, MoreHorizontal, Activity } from 'lucide-react';
-import dashboardData from '@/data/dashboardData.json';
+import { useEffect, useState } from "react"; // ⬅️ Added
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import StatusBadge from "@/components/StatusBadge";
+import { Container, Play, Square, MoreHorizontal, Activity } from "lucide-react";
+// import dashboardData from '@/data/dashboardData.json'; ⬅️ Removed
 
 const Containers = () => {
-  const { containers } = dashboardData;
+  const [containers, setContainers] = useState([]);
 
-  const runningContainers = containers.filter(c => c.status === 'Running').length;
-  const stoppedContainers = containers.filter(c => c.status === 'Stopped').length;
+  useEffect(() => {
+    async function fetchContainers() {
+      try {
+        const res = await fetch("http://localhost:5000/api/containers"); // ⬅️ backend endpoint
+        const data = await res.json();
+        setContainers(data);
+      } catch (err) {
+        console.error("Error fetching containers:", err);
+      }
+    }
+
+    fetchContainers();
+  }, []);
+
+  const runningContainers = containers.filter(c => c.status === "Running").length;
+  const stoppedContainers = containers.filter(c => c.status === "Stopped").length;
 
   return (
     <div className="space-y-6">
@@ -108,10 +123,10 @@ const Containers = () => {
                   <TableCell className="text-muted-foreground">{container.uptime}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <span className={container.status === 'Running' ? 'text-foreground' : 'text-muted-foreground'}>
+                      <span className={container.status === "Running" ? "text-foreground" : "text-muted-foreground"}>
                         {container.cpu}
                       </span>
-                      {container.status === 'Running' && (
+                      {container.status === "Running" && (
                         <div className="w-12 bg-muted rounded-full h-1">
                           <div 
                             className="bg-primary h-1 rounded-full" 
@@ -122,7 +137,7 @@ const Containers = () => {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className={container.status === 'Running' ? 'text-foreground' : 'text-muted-foreground'}>
+                    <span className={container.status === "Running" ? "text-foreground" : "text-muted-foreground"}>
                       {container.memory}
                     </span>
                   </TableCell>
@@ -134,7 +149,7 @@ const Containers = () => {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      {container.status === 'Running' ? (
+                      {container.status === "Running" ? (
                         <Button variant="outline" size="sm">
                           <Square className="h-3 w-3" />
                         </Button>
