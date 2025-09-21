@@ -1,19 +1,26 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid } from "recharts";
-import { Activity, Cpu, HardDrive, Wifi, Server } from "lucide-react";
+import { Cpu, HardDrive, Wifi, Server } from "lucide-react";
 
 const Monitoring = () => {
   const [monitoring, setMonitoring] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/monitoring")
-      .then((res) => res.json())
-      .then((data) => setMonitoring(data))
-      .catch((err) => console.error("Error fetching monitoring data:", err));
+    const fetchMonitoring = () => {
+      fetch("http://localhost:5000/api/monitoring")
+        .then((res) => res.json())
+        .then((data) => setMonitoring(data))
+        .catch((err) => console.error("Error fetching monitoring data:", err));
+    };
+
+    fetchMonitoring();
+    const interval = setInterval(fetchMonitoring, 5000); // update every 5s
+    return () => clearInterval(interval);
   }, []);
 
-  if (!monitoring) {
+  // ✅ Safety check while data is loading
+  if (!monitoring || !monitoring.currentStats) {
     return <p className="text-muted-foreground">Loading monitoring data...</p>;
   }
 
@@ -23,7 +30,9 @@ const Monitoring = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">System Monitoring</h2>
-          <p className="text-muted-foreground">Real-time system metrics and performance data</p>
+          <p className="text-muted-foreground">
+            Real-time system metrics and performance data
+          </p>
         </div>
       </div>
 

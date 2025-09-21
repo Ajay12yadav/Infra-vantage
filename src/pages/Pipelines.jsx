@@ -8,11 +8,21 @@ const Pipelines = () => {
   const [pipelines, setPipelines] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/pipelines")
-      .then((res) => res.json())
-      .then((data) => setPipelines(data))
-      .catch((err) => console.error("Error fetching pipelines:", err));
-  }, []);
+  const fetchPipelines = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/pipelines");
+      const data = await res.json();
+      setPipelines(data);
+    } catch (err) {
+      console.error("Error fetching pipelines:", err);
+    }
+  };
+
+  fetchPipelines();
+  const interval = setInterval(fetchPipelines, 10000); // every 10s
+  return () => clearInterval(interval);
+}, []);
+
 
   const formatDuration = (lastRun) => {
     const now = new Date();
