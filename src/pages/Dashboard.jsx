@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react'; // ⬅️ Added
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import MetricCard from '@/components/MetricCard';
 import StatusBadge from '@/components/StatusBadge';
-import { BarChart3, Container, GitBranch, Activity, Clock } from 'lucide-react';
-// import dashboardData from '@/data/dashboardData.json'; ⬅️ Removed
+import { BarChart3, Container, GitBranch, Activity, Clock, UserCircle } from 'lucide-react';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [summary, setSummary] = useState({});
   const [pipelines, setPipelines] = useState([]);
   const [containers, setContainers] = useState([]);
@@ -13,7 +14,6 @@ const Dashboard = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        // fetch from backend APIs
         const [pipelinesRes, containersRes, monitoringRes] = await Promise.all([
           fetch("http://localhost:5000/api/pipelines"),
           fetch("http://localhost:5000/api/containers"),
@@ -24,7 +24,6 @@ const Dashboard = () => {
         const containersData = await containersRes.json();
         const monitoringData = await monitoringRes.json();
 
-        // build same structure as dashboardData.json
         setSummary({
           totalPipelines: pipelinesData.length,
           runningContainers: containersData.filter(c => c.status === "Running").length,
@@ -42,12 +41,23 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  // Get recent pipelines for quick overview
   const recentPipelines = pipelines.slice(0, 3);
   const runningContainers = containers.filter(c => c.status === 'Running');
 
   return (
     <div className="space-y-6">
+      {/* Login Icon */}
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Dashboard Overview</h2>
+        <button
+          onClick={() => navigate('/login')}
+          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          title="Login"
+        >
+          <UserCircle className="h-6 w-6 text-gray-600" />
+        </button>
+      </div>
+
       {/* Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <MetricCard

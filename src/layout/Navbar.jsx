@@ -1,11 +1,26 @@
-import { useLocation } from 'react-router-dom';
+import { useState } from 'react'; 
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Bell, User, Settings, Search } from 'lucide-react';
+import { Bell, User, Settings, Search, LogOut } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import LoginModal from '@/components/LoginModal';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated');
+    navigate('/');
+  };
   const getPageTitle = (pathname) => {
     switch (pathname) {
       case '/':
@@ -57,9 +72,23 @@ const Navbar = () => {
             <Settings className="h-4 w-4" />
           </Button>
           
-          <Button variant="ghost" size="sm">
-            <User className="h-4 w-4" />
-          </Button>
+          <DropdownMenu open={showLoginModal} onOpenChange={setShowLoginModal}>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="hover:bg-accent">
+                <User className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="p-0">
+              {isAuthenticated ? (
+                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer flex items-center">
+                  <LogOut className="h-4 w-4 mr-2" />
+                  <span>Logout</span>
+                </DropdownMenuItem>
+              ) : (
+                <LoginModal onClose={() => setShowLoginModal(false)} />
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>

@@ -24,7 +24,6 @@ const App = () => (
             <Route path="/pipelines" element={<Pipelines />} />
             <Route path="/containers" element={<Containers />} />
             <Route path="/monitoring" element={<Monitoring />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
