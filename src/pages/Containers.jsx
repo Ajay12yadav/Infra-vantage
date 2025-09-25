@@ -13,9 +13,11 @@ const Containers = () => {
       try {
         const res = await fetch("http://localhost:5000/api/containers");
         const data = await res.json();
-        setContainers(data);
+        // Ensure data is an array before setting state
+        setContainers(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Error fetching containers:", err);
+        setContainers([]); // fallback to empty array
       }
     };
 
@@ -24,8 +26,9 @@ const Containers = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const runningContainers = containers.filter(c => c.state === "running").length;
-  const stoppedContainers = containers.filter(c => c.state !== "running").length;
+  // Safely filter containers
+  const runningContainers = Array.isArray(containers) ? containers.filter(c => c.state === "running").length : 0;
+  const stoppedContainers = Array.isArray(containers) ? containers.filter(c => c.state !== "running").length : 0;
 
   return (
     <div className="space-y-6">
@@ -47,7 +50,7 @@ const Containers = () => {
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-sm text-muted-foreground">Total</p>
-              <p className="text-2xl font-bold">{containers.length}</p>
+              <p className="text-2xl font-bold">{Array.isArray(containers) ? containers.length : 0}</p>
             </div>
             <Container className="h-8 w-8 text-primary" />
           </CardContent>
@@ -106,51 +109,55 @@ const Containers = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {containers.map(container => (
-                <TableRow key={container.id} className="hover:bg-background/50">
-                  <TableCell className="font-medium">{container.name}</TableCell>
-                  <TableCell>
-                    <StatusBadge status={container.state === "running" ? "Running" : "Stopped"} />
-                  </TableCell>
-                  <TableCell>
-                    {container.cpu ? (
-                      <div className="w-20 bg-muted rounded-full h-2">
-                        <div
-                          className="bg-primary h-2 rounded-full"
-                          style={{ width: container.cpu }}
-                        />
-                      </div>
-                    ) : (
-                      <span className="text-muted-foreground">N/A</span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {container.memory ? (
-                      <span>{container.memory}</span>
-                    ) : (
-                      <span className="text-muted-foreground">N/A</span>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-muted-foreground font-mono text-xs">{container.image}</TableCell>
-                  <TableCell className="text-muted-foreground font-mono text-xs">{container.ports?.join(", ")}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      {container.state === "running" ? (
-                        <Button variant="outline" size="sm">
-                          <Square className="h-3 w-3" />
-                        </Button>
+              {Array.isArray(containers) && containers.length > 0 ? (
+                containers.map(container => (
+                  <TableRow key={container.id} className="hover:bg-background/50">
+                    <TableCell className="font-medium">{container.name}</TableCell>
+                    <TableCell>
+                      <StatusBadge status={container.state === "running" ? "Running" : "Stopped"} />
+                    </TableCell>
+                    <TableCell>
+                      {container.cpu ? (
+                        <div className="w-20 bg-muted rounded-full h-2">
+                          <div
+                            className="bg-primary h-2 rounded-full"
+                            style={{ width: container.cpu }}
+                          />
+                        </div>
                       ) : (
-                        <Button variant="outline" size="sm">
-                          <Play className="h-3 w-3" />
-                        </Button>
+                        <span className="text-muted-foreground">N/A</span>
                       )}
-                      <Button variant="ghost" size="sm">
-                        <MoreHorizontal className="h-3 w-3" />
-                      </Button>
-                    </div>
+                    </TableCell>
+                    <TableCell>
+                      {container.memory ? <span>{container.memory}</span> : <span className="text-muted-foreground">N/A</span>}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground font-mono text-xs">{container.image}</TableCell>
+                    <TableCell className="text-muted-foreground font-mono text-xs">{container.ports?.join(", ")}</TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-2">
+                        {container.state === "running" ? (
+                          <Button variant="outline" size="sm">
+                            <Square className="h-3 w-3" />
+                          </Button>
+                        ) : (
+                          <Button variant="outline" size="sm">
+                            <Play className="h-3 w-3" />
+                          </Button>
+                        )}
+                        <Button variant="ghost" size="sm">
+                          <MoreHorizontal className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center text-muted-foreground">
+                    No containers found
                   </TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </CardContent>

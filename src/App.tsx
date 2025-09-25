@@ -9,6 +9,8 @@ import Pipelines from "./pages/Pipelines";
 import Containers from "./pages/Containers";
 import Monitoring from "./pages/Monitoring";
 import NotFound from "./pages/NotFound";
+import ServiceCredentials from "./components/ServiceCredentials";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -20,10 +22,44 @@ const App = () => (
       <BrowserRouter>
         <Layout>
           <Routes>
+            {/* Public routes */}
             <Route path="/" element={<Dashboard />} />
-            <Route path="/pipelines" element={<Pipelines />} />
-            <Route path="/containers" element={<Containers />} />
-            <Route path="/monitoring" element={<Monitoring />} />
+
+            {/* Protected routes */}
+            <Route
+              path="/pipelines"
+              element={
+                <ProtectedRoute>
+                  <Pipelines />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/containers"
+              element={
+                <ProtectedRoute>
+                  <Containers />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/monitoring"
+              element={
+                <ProtectedRoute>
+                  <Monitoring />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/services/credentials"
+              element={
+                <ProtectedRoute>
+                  <ServiceCredentials />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Not found route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

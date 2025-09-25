@@ -179,3 +179,26 @@ export const logout = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+// ======================= REFRESH TOKEN =======================
+export const refreshToken = async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) return res.status(400).json({ message: 'Token is required' });
+
+    // Verify token ignoring expiration
+    const decoded = jwt.verify(token, process.env.JWT_SECRET, { ignoreExpiration: true });
+
+    // Generate new token
+    const newToken = jwt.sign(
+      { id: decoded.id, email: decoded.email, name: decoded.name },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.json({ token: newToken });
+  } catch (error) {
+    console.error('Refresh token error:', error);
+    res.status(401).json({ message: 'Invalid token' });
+  }
+};
