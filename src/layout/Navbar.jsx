@@ -1,7 +1,7 @@
-import { useState } from 'react'; 
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Bell, User, Settings, Search, LogOut } from 'lucide-react';
+import { Bell, User, Settings, Search, LogOut, Key } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import AuthModal from '@/components/AuthModal';
 import {
@@ -36,6 +36,8 @@ const Navbar = () => {
         return 'Container Management';
       case '/monitoring':
         return 'System Monitoring';
+      case '/services/credentials':
+        return 'Service Credentials';
       default:
         return 'DevOps Dashboard';
     }
@@ -97,6 +99,16 @@ const Navbar = () => {
                     Signed in as <br />
                     <span className="font-medium text-foreground">{user.email}</span>
                   </DropdownMenuItem>
+
+                  {/* New Service Credentials link */}
+                  <DropdownMenuItem
+                    onClick={() => navigate('/services/credentials')}
+                    className="cursor-pointer flex items-center text-foreground hover:bg-accent/50"
+                  >
+                    <Key className="h-4 w-4 mr-2" />
+                    <span>Service Credentials</span>
+                  </DropdownMenuItem>
+
                   <DropdownMenuItem 
                     onClick={handleLogout} 
                     className="cursor-pointer flex items-center text-red-600 hover:text-red-700"

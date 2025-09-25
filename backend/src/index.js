@@ -2,9 +2,10 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
+import monitoringRoutes from "./routes/monitoring.js";      // <-- add this
+import containersRoutes from "./routes/containers.js";      // <-- add this
+import serviceCredentialsRoutes from "./routes/serviceCredentials.js"; // <-- add thi } from "stream";
 
-
-// Load environment variables
 dotenv.config();
 
 const app = express();
@@ -16,6 +17,9 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/monitoring", monitoringRoutes);
+app.use("/api/containers", containersRoutes);
+app.use("/api/services/credentials", serviceCredentialsRoutes);
 
 // Health check
 app.get("/health", (req, res) => {
@@ -43,11 +47,6 @@ app.listen(PORT, () => {
 // Handle unhandled promise rejections
 process.on("unhandledRejection", (err) => {
   console.error("Unhandled Promise Rejection:", err);
-  // Prevent the process from crashing
-  // In production, you might want to crash and restart
 });
 
 export default app;
-
-
-
