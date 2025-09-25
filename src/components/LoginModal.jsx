@@ -7,9 +7,10 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  CardDescription,
 } from '@/components/ui/card';
 
-const LoginModal = ({ onClose }) => {
+const LoginModal = ({ onClose, switchToSignUp }) => {
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState({
     email: '',
@@ -35,7 +36,6 @@ const LoginModal = ({ onClose }) => {
       const data = await response.json();
 
       if (!response.ok) {
-        // Handle specific error cases
         if (response.status === 401) {
           throw new Error('Email or password is incorrect');
         } else if (response.status === 404) {
@@ -66,14 +66,16 @@ const LoginModal = ({ onClose }) => {
       ...prev,
       [name]: value
     }));
-    // Clear error when user starts typing
     if (error) setError('');
   };
 
   return (
-    <Card className="w-[350px]">
-      <CardHeader>
-        <CardTitle>Login to InfraVantage</CardTitle>
+    <Card className="w-[400px]">
+      <CardHeader className="space-y-1">
+        <CardTitle className="text-2xl text-center">Welcome back</CardTitle>
+        <CardDescription className="text-center">
+          Enter your credentials to access your account
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -87,7 +89,7 @@ const LoginModal = ({ onClose }) => {
             <Input
               type="email"
               name="email"
-              placeholder="Enter email"
+              placeholder="name@example.com"
               value={credentials.email}
               onChange={handleChange}
               required
@@ -100,7 +102,7 @@ const LoginModal = ({ onClose }) => {
             <Input
               type="password"
               name="password"
-              placeholder="Password"
+              placeholder="Enter your password"
               value={credentials.password}
               onChange={handleChange}
               required
@@ -111,17 +113,43 @@ const LoginModal = ({ onClose }) => {
 
           <Button 
             type="submit" 
-            className="w-full bg-blue-600 hover:bg-blue-700"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
             disabled={isLoading}
           >
             {isLoading ? (
               <span className="flex items-center justify-center">
-                <span className="mr-2">Logging in...</span>
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Logging in...
               </span>
             ) : (
-              'Login'
+              'Sign In'
             )}
           </Button>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-2 text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          <div className="text-center text-sm">
+            <span className="text-gray-600">Don't have an account? </span>
+            <button
+              type="button"
+              onClick={switchToSignUp}
+              className="text-blue-600 hover:underline font-semibold"
+            >
+              Create Account
+            </button>
+          </div>
         </form>
       </CardContent>
     </Card>

@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Bell, User, Settings, Search, LogOut } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import LoginModal from '@/components/LoginModal';
+import AuthModal from '@/components/AuthModal';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,13 +14,18 @@ import {
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setShowAuthModal(false);
     navigate('/');
   };
+
   const getPageTitle = (pathname) => {
     switch (pathname) {
       case '/':
@@ -72,20 +77,36 @@ const Navbar = () => {
             <Settings className="h-4 w-4" />
           </Button>
           
-          <DropdownMenu open={showLoginModal} onOpenChange={setShowLoginModal}>
+          <DropdownMenu open={showAuthModal} onOpenChange={setShowAuthModal}>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="hover:bg-accent">
-                <User className="h-4 w-4" />
+                {isAuthenticated ? (
+                  <div className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    <span className="text-sm font-medium">{user.name}</span>
+                  </div>
+                ) : (
+                  <User className="h-4 w-4" />
+                )}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="p-0">
               {isAuthenticated ? (
-                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer flex items-center">
-                  <LogOut className="h-4 w-4 mr-2" />
-                  <span>Logout</span>
-                </DropdownMenuItem>
+                <>
+                  <DropdownMenuItem className="p-2 text-sm text-muted-foreground">
+                    Signed in as <br />
+                    <span className="font-medium text-foreground">{user.email}</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    onClick={handleLogout} 
+                    className="cursor-pointer flex items-center text-red-600 hover:text-red-700"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    <span>Logout</span>
+                  </DropdownMenuItem>
+                </>
               ) : (
-                <LoginModal onClose={() => setShowLoginModal(false)} />
+                <AuthModal onClose={() => setShowAuthModal(false)} />
               )}
             </DropdownMenuContent>
           </DropdownMenu>
