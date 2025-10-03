@@ -2,9 +2,14 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
-import monitoringRoutes from "./routes/monitoring.js";      // <-- add this
-import containersRoutes from "./routes/containers.js";      // <-- add this
-import serviceCredentialsRoutes from "./routes/serviceCredentials.js"; // <-- add thi } from "stream";
+import monitoringRoutes from "./routes/monitoring.js";
+import containersRoutes from "./routes/containers.js";
+import serviceCredentialsRoutes from "./routes/Credentials.js";
+import dockerHubRoutes from './routes/dockerHub.routes.js';
+import githubRoutes from './routes/github.routes.js';
+import { authenticateToken } from './middleware/auth.middleware.js';
+
+
 
 dotenv.config();
 
@@ -12,24 +17,32 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:8080',
+  credentials: true
+}));
 app.use(express.json());
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
 
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/monitoring", monitoringRoutes);
 app.use("/api/containers", containersRoutes);
 app.use("/api/services/credentials", serviceCredentialsRoutes);
+app.use('/api/services/dockerhub', dockerHubRoutes);
+app.use('/api/services/github', githubRoutes);
 
-// Health check
-app.get("/health", (req, res) => {
-  res.json({ status: "Server is running" });
-});
-
-// Error handling middleware
+// Error handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ message: "Something went wrong!" });
+  res.status(500).json({ 
+    success: false, 
+    message: 'Internal Server Error' 
+  });
 });
 
 // 404 handler

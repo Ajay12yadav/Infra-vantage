@@ -114,3 +114,29 @@ export const validateServiceAccess = async (req, res, next) => {
     return res.status(500).json({ message: 'Server error' });
   }
 };
+
+export const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    console.log('No token provided');
+    return res.status(401).json({
+      success: false,
+      message: 'No authentication token provided'
+    });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('Token verified for user:', decoded.id);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    console.error('Token verification failed:', error.message);
+    return res.status(403).json({
+      success: false,
+      message: 'Invalid token'
+    });
+  }
+};

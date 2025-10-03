@@ -12,6 +12,10 @@ import Monitoring from "./pages/Monitoring";
 import NotFound from "./pages/NotFound";
 import ServiceCredentials from "./components/ServiceCredentials";
 import ProtectedRoute from "./components/ProtectedRoute";
+import DockerHub from "./pages/DockerHub";
+import GitHub from "./pages/GitHub";
+import Jenkins from "./pages/Jenkins";
+import ServiceConnection from "./components/ServiceConnection";
 
 const queryClient = new QueryClient();
 
@@ -56,6 +60,38 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <ServiceCredentials />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/services/connect/:serviceType"
+              element={
+                <ProtectedRoute>
+                  <ServiceConnection />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/docker-hub" // Changed from /dockerhub
+              element={
+                <ProtectedRoute>
+                  <DockerHub />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/github"
+              element={
+                <ProtectedRoute>
+                  <GitHub />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/jenkins"
+              element={
+                <ProtectedRoute>
+                  <Jenkins />
                 </ProtectedRoute>
               }
             />

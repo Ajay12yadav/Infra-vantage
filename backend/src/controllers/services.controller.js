@@ -1,28 +1,31 @@
 import pool from '../config/db.config.js';
 import Docker from 'dockerode';
 import Jenkins from 'jenkins';
+import { saveServiceCredentials, getServiceCredentials } from '../models/serviceCredentials.js';
 
 export const addServiceCredentials = async (req, res) => {
-  const { serviceType, credentials } = req.body;
-  const userId = req.user.id; // From JWT auth middleware
-
   try {
-    // Validate credentials before saving
-    await validateCredentials(serviceType, credentials);
+    const userId = req.user.id; // From auth middleware
+    const { serviceType, credentials } = req.body;
 
-    const result = await pool.query(
-      `INSERT INTO service_credentials 
-       (user_id, service_type, credentials) 
-       VALUES ($1, $2, $3)
-       ON CONFLICT (user_id, service_type) 
-       DO UPDATE SET credentials = $3, updated_at = NOW()
-       RETURNING *`,
-      [userId, serviceType, credentials]
-    );
+    const saved = await saveServiceCredentials(userId, serviceType, credentials);
 
-    res.json(result.rows[0]);
+    res.json({
+      success: true,
+      message: 'Service credentials saved successfully',
+      data: {
+        id: saved.id,
+        serviceType: saved.service_type,
+        updatedAt: saved.updated_at
+      }
+    });
+
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error('Failed to save credentials:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to save credentials'
+    });
   }
 };
 
@@ -83,5 +86,36 @@ export const fetchJenkinsData = async (req, res) => {
     res.json(jobs);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const getUserServiceCredentials = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { serviceType } = req.params;
+
+    const credentials = await getServiceCredentials(userId, serviceType);
+
+    if (!credentials) {
+      return res.status(404).json({
+        success: false,
+        message: 'No credentials found for this service'
+      });
+    }
+
+    res.json({
+      success: true,
+      data: {
+        serviceType: credentials.service_type,
+        credentials: credentials.credentials
+      }
+    });
+
+  } catch (error) {
+    console.error('Failed to get credentials:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve credentials'
+    });
   }
 };
