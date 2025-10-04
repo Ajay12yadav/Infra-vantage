@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -6,6 +7,7 @@ import StatusBadge from "@/components/StatusBadge";
 import { Container, Play, Square, MoreHorizontal, Activity } from "lucide-react";
 
 const Containers = () => {
+  const navigate = useNavigate();
   const [containers, setContainers] = useState([]);
 
   useEffect(() => {
@@ -29,6 +31,10 @@ const Containers = () => {
   // Safely filter containers
   const runningContainers = Array.isArray(containers) ? containers.filter(c => c.state === "running").length : 0;
   const stoppedContainers = Array.isArray(containers) ? containers.filter(c => c.state !== "running").length : 0;
+
+  const handleContainerClick = (containerId) => {
+    navigate(`/containers/${containerId}`);
+  };
 
   return (
     <div className="space-y-6">
@@ -111,7 +117,11 @@ const Containers = () => {
             <TableBody>
               {Array.isArray(containers) && containers.length > 0 ? (
                 containers.map(container => (
-                  <TableRow key={container.id} className="hover:bg-background/50">
+                  <TableRow 
+                    key={container.id} 
+                    className="hover:bg-background/50 cursor-pointer"
+                    onClick={() => handleContainerClick(container.id)}
+                  >
                     <TableCell className="font-medium">{container.name}</TableCell>
                     <TableCell>
                       <StatusBadge status={container.state === "running" ? "Running" : "Stopped"} />

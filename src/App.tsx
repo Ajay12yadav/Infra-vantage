@@ -16,6 +16,7 @@ import DockerHub from "./pages/DockerHub";
 import GitHub from "./pages/GitHub";
 import Jenkins from "./pages/Jenkins";
 import ServiceConnection from "./components/ServiceConnection";
+import ContainerDetails from "./pages/ContainerDetails";
 
 const queryClient = new QueryClient();
 
@@ -95,6 +96,7 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route path="/containers/:id" element={<ContainerDetails />} />
 
             {/* Not found route */}
             <Route path="*" element={<NotFound />} />
