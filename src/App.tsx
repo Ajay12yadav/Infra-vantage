@@ -17,6 +17,7 @@ import GitHub from "./pages/GitHub";
 import Jenkins from "./pages/Jenkins";
 import ServiceConnection from "./components/ServiceConnection";
 import ContainerDetails from "./pages/ContainerDetails";
+import Kubernetes from "./pages/Kubernetes";
 
 const queryClient = new QueryClient();
 
@@ -97,6 +98,14 @@ const App = () => (
               }
             />
             <Route path="/containers/:id" element={<ContainerDetails />} />
+            <Route
+              path="/kubernetes"
+              element={
+                <ProtectedRoute>
+                  <Kubernetes />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Not found route */}
             <Route path="*" element={<NotFound />} />

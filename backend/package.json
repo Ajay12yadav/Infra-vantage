@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@kubernetes/client-node": "^1.4.0",
     "@octokit/rest": "^22.0.0",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",

@@ -7,6 +7,7 @@ import containersRoutes from "./routes/containers.js";
 import serviceCredentialsRoutes from "./routes/Credentials.js";
 import dockerHubRoutes from './routes/dockerHub.routes.js';
 import githubRoutes from './routes/github.routes.js';
+import kubernetesRoutes from './routes/kubernetes.js';
 import { authenticateToken } from './middleware/auth.middleware.js';
 
 
@@ -35,6 +36,7 @@ app.use("/api/containers", containersRoutes);
 app.use("/api/services/credentials", serviceCredentialsRoutes);
 app.use('/api/services/dockerhub', dockerHubRoutes);
 app.use('/api/services/github', githubRoutes);
+app.use('/api/kubernetes', kubernetesRoutes);
 
 // Error handling
 app.use((err, req, res, next) => {

@@ -4,7 +4,10 @@ import {
   GitBranch, 
   Container, 
   Activity,
-  Menu
+  Menu,
+  Server,
+  Box,
+  Database
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -34,7 +37,13 @@ const Sidebar = () => {
       name: 'Monitoring',
       href: '/monitoring',
       icon: Activity
+    },
+    {
+      name: 'Kubernetes',
+      href: '/kubernetes',
+      icon: Activity
     }
+
   ];
 
   const isActive = (path) => {
