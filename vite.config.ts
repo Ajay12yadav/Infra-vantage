@@ -16,3 +16,4 @@ export default defineConfig(({ mode }) => ({
     },
   },
 }));
+// vite.config.ts file for a project using Vite, React, TypeScript, and shadcn UI components

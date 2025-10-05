@@ -14,3 +14,4 @@
     "strictNullChecks": false
   }
 }
+// tsconfig.json file for a project using Vite, React, TypeScript, and shadcn UI components
