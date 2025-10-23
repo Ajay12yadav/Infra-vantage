@@ -1,5 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
+  "_documentation": "Configuration file for shadcn/ui components",
   "style": "default",
   "rsc": false,
   "tsx": true,
