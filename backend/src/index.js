@@ -9,6 +9,9 @@ import dockerHubRoutes from './routes/dockerHub.routes.js';
 import githubRoutes from './routes/github.routes.js';
 import kubernetesRoutes from './routes/kubernetes.js';
 import { authenticateToken } from './middleware/auth.middleware.js';
+import jenkinsRoutes from './routes/jenkins.js';
+import terraformRoutes from './routes/terraform.js';
+import ansibleRoutes from './routes/ansible.js';
 
 
 
@@ -37,6 +40,9 @@ app.use("/api/services/credentials", serviceCredentialsRoutes);
 app.use('/api/services/dockerhub', dockerHubRoutes);
 app.use('/api/services/github', githubRoutes);
 app.use('/api/kubernetes', kubernetesRoutes);
+app.use('/api/services/jenkins', jenkinsRoutes);
+app.use('/api/services/terraform', terraformRoutes);
+app.use('/api/services/ansible', ansibleRoutes);
 
 // Error handling
 app.use((err, req, res, next) => {

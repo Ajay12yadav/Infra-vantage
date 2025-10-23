@@ -29,8 +29,66 @@ const ServiceCredentials = () => {
       icon: '🐙',
       route: '/github',
       fields: ['token']
+    },
+    {
+      id: 'jenkins',
+      name: 'Jenkins',
+      icon: '⚙️',
+      route: '/jenkins',
+      fields: ['url', 'username', 'token']
+    },
+    {
+      id: 'terraform',
+      name: 'Terraform Cloud',
+      icon: '🌍',
+      route: '/terraform',
+      fields: ['organization', 'token']
+    },
+    {
+      id: 'ansible',
+      name: 'Ansible Tower',
+      icon: '🎮',
+      route: '/ansible',
+      fields: ['url', 'username', 'password']
+    },
+    {
+      id: 'kubernetes',
+      name: 'Kubernetes',
+      icon: '☸️',
+      route: '/kubernetes',
+      fields: ['kubeconfig', 'context']
     }
   ];
+
+  // Add helper text for different service types
+  const getHelperText = (serviceType, field) => {
+    const helpers = {
+      dockerhub: {
+        token: 'Generate a token at Docker Hub → Account Settings → Security → New Access Token'
+      },
+      github: {
+        token: 'Create a token at GitHub → Settings → Developer Settings → Personal Access Tokens'
+      },
+      jenkins: {
+        token: 'Generate a token at Jenkins → User → Configure → API Token',
+        url: 'Enter your Jenkins server URL (e.g., https://jenkins.example.com)'
+      },
+      terraform: {
+        token: 'Create a token at Terraform Cloud → User Settings → Tokens',
+        organization: 'Enter your Terraform Cloud organization name'
+      },
+      ansible: {
+        url: 'Enter your Ansible Tower URL (e.g., https://ansible.example.com)',
+        password: 'Enter your Ansible Tower password or API token'
+      },
+      kubernetes: {
+        kubeconfig: 'Paste your kubeconfig file content or path',
+        context: 'Specify the kubernetes context to use (optional)'
+      }
+    };
+
+    return helpers[serviceType]?.[field] || '';
+  };
 
   // Debug logging
   console.log('Current service type:', credentials.serviceType);
@@ -180,13 +238,57 @@ const ServiceCredentials = () => {
 
       switch (credentials.serviceType) {
         case 'jenkins':
-          navigate('/jenkins', {
-            state: {
-              url: credentials.credentials.url,
-              username: credentials.credentials.username
-            }
+          const jenkinsResponse = await fetch('http://localhost:5000/api/services/jenkins/verify', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(credentials.credentials)
           });
+          if (!jenkinsResponse.ok) throw new Error('Failed to verify Jenkins credentials');
+          navigate('/jenkins');
           break;
+
+        case 'terraform':
+          const terraformResponse = await fetch('http://localhost:5000/api/services/terraform/verify', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(credentials.credentials)
+          });
+          if (!terraformResponse.ok) throw new Error('Failed to verify Terraform credentials');
+          navigate('/terraform');
+          break;
+
+        case 'ansible':
+          const ansibleResponse = await fetch('http://localhost:5000/api/services/ansible/verify', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(credentials.credentials)
+          });
+          if (!ansibleResponse.ok) throw new Error('Failed to verify Ansible credentials');
+          navigate('/ansible');
+          break;
+
+        case 'kubernetes':
+          const k8sResponse = await fetch('http://localhost:5000/api/services/kubernetes/verify', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(credentials.credentials)
+          });
+          if (!k8sResponse.ok) throw new Error('Failed to verify Kubernetes credentials');
+          navigate('/kubernetes');
+          break;
+
         default:
           navigate('/dashboard');
       }
@@ -228,9 +330,12 @@ const ServiceCredentials = () => {
           {/* Service Fields - with null check */}
           {credentials.serviceType && serviceTypes.find(s => s.id === credentials.serviceType)?.fields?.map(field => (
             <div key={field} className="space-y-2">
+              <label className="text-sm font-medium">
+                {field.charAt(0).toUpperCase() + field.slice(1)}
+              </label>
               <Input
-                type={field === 'token' ? 'password' : 'text'}
-                placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+                type={field.includes('password') || field.includes('token') ? 'password' : 'text'}
+                placeholder={`Enter ${field}`}
                 value={credentials.credentials[field] || ''}
                 onChange={(e) => setCredentials(prev => ({
                   ...prev,
@@ -240,6 +345,11 @@ const ServiceCredentials = () => {
                   }
                 }))}
               />
+              {getHelperText(credentials.serviceType, field) && (
+                <p className="text-sm text-muted-foreground">
+                  {getHelperText(credentials.serviceType, field)}
+                </p>
+              )}
             </div>
           ))}
 

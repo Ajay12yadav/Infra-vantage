@@ -49,17 +49,11 @@ const Dashboard = () => {
       {/* Login Icon */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Dashboard Overview</h2>
-        <button
-          onClick={() => navigate('/login')}
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-          title="Login"
-        >
-          <UserCircle className="h-6 w-6 text-gray-600" />
-        </button>
+        
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap- mb-8">
         <MetricCard
           title="Total Pipelines"
           value={summary.totalPipelines}

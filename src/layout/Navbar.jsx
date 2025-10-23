@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Bell, User, Settings, Search, LogOut, Key } from 'lucide-react';
+import { Bell, User, Settings, Search, LogOut, Key, Moon, Sun } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import AuthModal from '@/components/AuthModal';
+import { useTheme } from "@/components/theme-provider";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +18,7 @@ const Navbar = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
   const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const { theme, setTheme } = useTheme();
 
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated');
@@ -68,6 +70,17 @@ const Navbar = () => {
 
         {/* Actions */}
         <div className="flex items-center gap-2">
+          {/* Theme Toggle */}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+          >
+            <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <span className="sr-only">Toggle theme</span>
+          </Button>
+
           <Button variant="ghost" size="sm" className="relative">
             <Bell className="h-4 w-4" />
             <span className="absolute -top-1 -right-1 w-3 h-3 bg-destructive rounded-full text-xs flex items-center justify-center text-destructive-foreground">
