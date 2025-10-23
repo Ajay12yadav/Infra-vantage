@@ -22,4 +22,25 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-#macOS
+
+# macOS
+.DS_Store
+
+# Environment files
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# Build artifacts
+/build
+/out
+.cache
+
+# Coverage reports
+/coverage
+
+# Local Netlify folder
+.netlify
