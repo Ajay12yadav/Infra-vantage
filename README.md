@@ -28,21 +28,7 @@ A professional DevOps monitoring dashboard built with **React**, **Vite**, **Tai
 
 ---
 
-## Project Structure
 
-devops-journey-hub-07/
-│
-├─ public/ # Static assets (favicon, images, etc.)
-├─ src/
-│ ├─ components/ # Reusable UI components
-│ ├─ pages/ # Page components (Dashboard, Metrics, etc.)
-│ ├─ App.tsx # Main App component
-│ ├─ main.tsx # Entry point
-│ └─ index.css # TailwindCSS styles
-├─ package.json
-├─ vite.config.ts
-├─ tailwind.config.ts
-└─ README.md
 
 
 
