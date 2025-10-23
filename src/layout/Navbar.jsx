@@ -81,16 +81,9 @@ const Navbar = () => {
             <span className="sr-only">Toggle theme</span>
           </Button>
 
-          <Button variant="ghost" size="sm" className="relative">
-            <Bell className="h-4 w-4" />
-            <span className="absolute -top-1 -right-1 w-3 h-3 bg-destructive rounded-full text-xs flex items-center justify-center text-destructive-foreground">
-              3
-            </span>
-          </Button>
+        
           
-          <Button variant="ghost" size="sm">
-            <Settings className="h-4 w-4" />
-          </Button>
+          
           
           <DropdownMenu open={showAuthModal} onOpenChange={setShowAuthModal}>
             <DropdownMenuTrigger asChild>
